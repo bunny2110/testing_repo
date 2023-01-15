@@ -1,0 +1,35 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  issues:
+    types: [opened, edited, reopened]
+  issue_comment:
+    types: [created, edited]
+  push:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  HMAC_SECRET: ${{secrets.DEVOPS_HMAC_SECRET}}
+  HMAC_ACCESS_KEY: ${{secrets.DEVOPS_HMAC_ACCESS_KEY}}  
+  DEVOPS_GITHUB_TOKEN: ${{secrets.DEVOPS_GITHUB_TOKEN}}
+  DEVOPS_ISSUE_NUMBER: ${{ github.event.issue.number }}
+  DEVOPS_REPO_NAME: platform-infra-staging
+  DEVOPS_BRANCH_NAME: refs/heads/main
+  
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  request-event:
+    runs-on: [ self-hosted ]
+    steps:
+      - uses: actions/checkout@v2
+          
+      - name: "trigger the flow"
+        run: echo "Triggered by dispatch event"
